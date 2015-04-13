@@ -2,13 +2,13 @@
 <head></head>
 <body>
 	<h1> NOT THAT KIND OF MOLLY </h1>
-	<h2> //get blogpost title from db <h2>
-		<img src = (path to img src)>
+	<h2> BLOG POST <h2>
+    <ul>
+            <% for(var i = 0; i < posts.length;i++){ %>
+            <li>
+            <h3><a href="/posts/<%= posts[i].id %> "> <%= posts[i].title %> </a><h3> <% } %>
+            </li>
+    </ul>
 
-
-		<a href="/posts/new">Make a new post here</a>
-
-
-</body>
-
-</html>
+<a href="posts/new">Add New Post</a>    
+</body>    

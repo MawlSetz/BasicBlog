@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<body>
+	<h1>NOT THAT KIND OF MOLLY</h1>
+	<!-- display information about particular post -->
+	<p><%= thisPost.name %> is a <%= thisPost.type %>.</p>
+	<!-- link to go home -->
+	<a href="/posts">Go home here.</a>
+</br>
+	<a href="/post/<%= thisPost.id %>/edit">Update this post here</a>
+</br>
+<form method="POST" action="/post/<%= thisPost.id %>?_method=DELETE">
+	<button>DELETE</button>
+</form>
+</body>
+</html>
