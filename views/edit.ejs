@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<body>
+	<!-- update form -->
+	<h3>Update <%= thisPost.title %> here:</h3>
+	<form method="POST" action="/post/<%= thisPet.id %>?_method=PUT">
+		<input type="text" name="name" placeholder="<%= thisPost.title %>" required>
+		<input type="text" name="type" placeholder="<%= thisPet.paragraph %>" required>
+		<input type="text" name="type" placeholder="<%= thisPet.image %>" required>
+		<button>Submit Changes</button>
+	</form>
+</body>
+</html>
