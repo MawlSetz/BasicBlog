@@ -4,8 +4,8 @@
 	<h3>Update <%= thisPost.title %> here:</h3>
 	<form method="POST" action="/post/<%= thisPet.id %>?_method=PUT">
 		<input type="text" name="name" placeholder="<%= thisPost.title %>" required>
-		<input type="text" name="type" placeholder="<%= thisPet.paragraph %>" required>
-		<input type="text" name="type" placeholder="<%= thisPet.image %>" required>
+		<input type="text" name="type" placeholder="<%= thisPost.paragraph %>" required>
+		<input type="text" name="type" placeholder="<%= thisPost.image %>" required>
 		<button>Submit Changes</button>
 	</form>
 </body>
