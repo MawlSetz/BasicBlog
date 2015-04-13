@@ -36,18 +36,19 @@ app.use(methodOverride('_method'))
 //allow sqlite3
 var sqlite3 = require('sqlite3').verbose();
 //set database
-var db = new sqlite3.Database('./db/movies.db');
+var db = new sqlite3.Database('blog.db');
 //request
 var request = require('request')
 
 
 //ROUTES
+//redirect
 app.get('/', function(req, res){
 	res.redirect('/posts')
 });
-
+//show all posts
 app.get('/posts', function(req, res){
-	db.all('SELECT * FROM posts;' function(err, data){
+	db.all('SELECT * FROM posts', function(err, data){
 		if (err) {
 			console.log(err);
 		} else {
@@ -56,14 +57,50 @@ app.get('/posts', function(req, res){
 		} res.render('index.ejs', {posts: posts});
 	});
 });
-
+//show individual post
 app.get('/post/:id', function(req, res){
 	var id = req.params.id;
 	db.get('SELECT * FROM posts WHERE id = ?', id, function(err, data){
 		var post_row = data;
 		console.log(post_row);
+		res.render('show.ejs', {thisPost: data})
 	});
 });
+//serve up new page to create a new post
+app.get('/posts/new', function(req, res){
+	res.render('new.ejs')
+})
+//create a new post
+app.post('/posts', function(req, res){
+	console.log(req.body)
+
+
+
+})
+//sending user to eduit/update a post page
+app.get('post/:id/edit', function(req, res){
+	var thisPost = posts[parseInt(req.params.id)]
+	res.render("edit.ejs", {thisPost: thisPost})
+})
+//update a post
+app.put('post/:id', function(req, res){
+	pets[parseInt(req.params.id)] = {
+		id: parseInt(req.params.id),
+		title: req.body.title,
+		type: req.body.type
+	}
+	
+	//redirect to this posts's page to see changes
+	res.redirect('/post/' + parseInt(req.params.id))
+
+});
+
+//delete a post
+app.delete('/post/:id', function(res, res){
+	delete pets[parseInt(req.params.id)]
+	res.redirect('/posts')
+});
+
 
 app.listen('3000');
 console.log("listening on port 3000");
