@@ -1,0 +1,1 @@
+INSERT INTO posts (title, paragraph, image) VALUES ("Post1", "Lorem Ipsum shit", "random.url");

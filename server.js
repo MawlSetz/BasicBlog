@@ -36,7 +36,7 @@ app.use(methodOverride('_method'))
 //allow sqlite3
 var sqlite3 = require('sqlite3').verbose();
 //set database
-var db = new sqlite3.Database('blog.db');
+var db = new sqlite3.Database('posts.db');
 //request
 var request = require('request')
 
@@ -54,9 +54,19 @@ app.get('/posts', function(req, res){
 		} else {
 			var posts = data;
 			console.log(posts)
-		} res.render('index.ejs', {posts: posts});
+		} res.render('index.ejs', {posts: data});
 	});
 });
+
+
+// app.get('/pets', function(req, res){
+//     //get pets from pets.db and send to index.ejs
+//     db.get("SELECT * FROM pets", function(err,data) {
+//         console.log(data);
+//         //res.render('index.ejs', {pets: data})
+//         res.write("hi");
+//     });
+// });
 //show individual post
 app.get('/post/:id', function(req, res){
 	var id = req.params.id;
@@ -69,37 +79,43 @@ app.get('/post/:id', function(req, res){
 //serve up new page to create a new post
 app.get('/posts/new', function(req, res){
 	res.render('new.ejs')
-})
+});
 //create a new post
 app.post('/posts', function(req, res){
 	console.log(req.body)
+	 db.run("INSERT INTO posts (title, paragraph, image) VALUES (?,?,?)", req.body.title, req.body.paragraph, req.body.image, function(err) {
+        if (err) throw err;
+        res.redirect('/posts');
+    });
 
 
-
-})
-//sending user to eduit/update a post page
+});
+//sending user to edit/update a post page
 app.get('post/:id/edit', function(req, res){
 	var thisPost = posts[parseInt(req.params.id)]
 	res.render("edit.ejs", {thisPost: thisPost})
-})
-//update a post
-app.put('post/:id', function(req, res){
-	pets[parseInt(req.params.id)] = {
-		id: parseInt(req.params.id),
-		title: req.body.title,
-		type: req.body.type
-	}
-	
-	//redirect to this posts's page to see changes
-	res.redirect('/post/' + parseInt(req.params.id))
-
 });
+//update a post
+app.put('/post/:id', function(req, res){
+    //make changes to appropriate pet
+    db.run("UPDATE posts SET title = ?, paragraph = ?, image = ? WHERE id = ?", req.body.title, req.body.paragraph, req.body.image, req.params.id, function(err) {
+        if (err) throw err;
+        //redirect to this pet's page to see changes
+        res.redirect('/post/' + parseInt(req.params.id))
+    });
+});
+
 
 //delete a post
-app.delete('/post/:id', function(res, res){
-	delete pets[parseInt(req.params.id)]
-	res.redirect('/posts')
+app.delete('/post/:id', function(req, res){
+    //use delete keyword to delete pet
+    db.run("DELETE FROM posts WHERE id = ?", req.params.id, function(err) {
+        if (err) throw err;
+        //go to /posts to see change
+        res.redirect('/posts')
+    });
 });
+
 
 
 app.listen('3000');
