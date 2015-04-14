@@ -76,6 +76,7 @@ app.get('/post/:id', function(req, res){
 		res.render('show.ejs', {thisPost: data})
 	});
 });
+
 //serve up new page to create a new post
 app.get('/posts/new', function(req, res){
 	res.render('new.ejs')
@@ -91,16 +92,24 @@ app.post('/posts', function(req, res){
 
 });
 //sending user to edit/update a post page
-app.get('post/:id/edit', function(req, res){
-	var thisPost = posts[parseInt(req.params.id)]
-	res.render("edit.ejs", {thisPost: thisPost})
+app.get('/post/:id/edit', function(req, res){
+
+	var id = req.params.id;
+	db.get('SELECT * FROM posts WHERE id = ?', id, function(err, data){
+		var post_row = data;
+		console.log(post_row);
+		res.render("edit.ejs", {thisPost: data})
+		return
+	});
+
+	// res.render("edit.ejs", {thisPost: null})
 });
 //update a post
 app.put('/post/:id', function(req, res){
-    //make changes to appropriate pet
+    //make changes to appropriate post
     db.run("UPDATE posts SET title = ?, paragraph = ?, image = ? WHERE id = ?", req.body.title, req.body.paragraph, req.body.image, req.params.id, function(err) {
         if (err) throw err;
-        //redirect to this pet's page to see changes
+        //redirect to this post's page to see changes
         res.redirect('/post/' + parseInt(req.params.id))
     });
 });
